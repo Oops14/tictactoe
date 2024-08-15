@@ -1,0 +1,37 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100vh;
+}
+
+.container {
+  max-width: 900px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.r_item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 75px;
+
+  box-sizing: border-box;
+  /*width: 33.3333%;*/
+  height: 150px;
+  background: rgba(255, 213, 70, 0.4);
+  border: 2px dashed rgba(236, 198, 48, 0.5);
+
+  cursor: pointer;
+}
+
+.r_item:hover {
+  background-color: aqua;
+}
+
+.row {
+  width: 500px;
+}
