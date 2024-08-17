@@ -3,19 +3,10 @@ const row = document.querySelector(".row");
 const div = document.createElement("div");
 div.className = "col-4 r_item";
 
-const boardX = [];
-const boardY = [];
+let boardX = [];
+let boardY = [];
 
 let addToBoardX = true;
-
-function cleanUp() {
-  const elements = document.querySelectorAll(".col-4");
-
-  elements.forEach(element => {
-    // element.innerHTML = ""; // or use element.textContent = '';
-    element.style.pointerEvents = "none";
-  });
-}
 
 function startGame() {
   const winPatterns = [
@@ -59,16 +50,14 @@ function startGame() {
       const index = parseInt(newDiv.getAttribute("data-index"), 10);
 
       // Add value from meta attributes to the boards variables.
-      if (!boardX.includes(index)) {
+      if (!boardX.includes(index) && !boardY.includes(index)) {
         addValue(index);
-        console.log(`Index ${index} added to boardX:`, boardX);
-        console.log(`Index ${index} added to boardY:`, boardY);
       }
 
       for (let j = 0; j < winPatterns.length; j++) {
         console.log(winPatterns[j]);
 
-        // When consecutive incresing to 3 at once means
+        // When consecutive incresing to 3 at once it means
         // that the first ascent with the winPatterns is defined.
         let consecutiveMatchesX = 0;
         let consecutiveMatchesY = 0;
@@ -100,28 +89,15 @@ function startGame() {
         }
       }
 
-      let gameOver = false;
-
       // Checking who won.
       if (countX > countY) {
-        console.log(
-          "==================== X has more matches ===================="
-        );
-        gameOver = true;
         cleanUp();
+        showPopup("The winner is X player");
       } else if (countY > countX) {
-        console.log(
-          "==================== 0 has more matches ===================="
-        );
-        gameOver = true;
+        cleanUp();
+        showPopup("The winner is 0 player");
       } else {
         console.log("Draw");
-      }
-
-      // Example of checking the gameOver flag before proceeding with further game logic
-      if (gameOver) {
-        console.log("Game Over. No further moves allowed.");
-        // Add any additional logic to stop the game here, such as disabling input or ending the game loop
       }
     });
 
@@ -132,10 +108,43 @@ function startGame() {
 startGame();
 
 function handleReset() {
-  document.querySelector("#reset").addEventListener("click", function () {
-    cleanUp();
+  document.querySelector(".reset").addEventListener("click", function () {
+    // Clear the existing rows
+    const squares = document.querySelectorAll(".r_item");
+    squares.forEach(row => row.remove());
+
+    // Reset the game state
+    boardX = [];
+    boardY = [];
+    addToBoardX = true;
+
+    closePopup();
     startGame();
   });
 }
 
-// handleReset();
+function cleanUp() {
+  const elements = document.querySelectorAll(".col-4");
+
+  elements.forEach(element => {
+    element.style.pointerEvents = "none";
+  });
+}
+
+function showPopup(text) {
+  const popup = document.querySelector(".popup");
+  const popupContent = document.querySelector(".popup-content");
+
+  popupContent.innerHTML = `
+    <div class="end-text">${text}</div>
+  `;
+
+  popup.classList.add("active");
+}
+
+function closePopup() {
+  const popup = document.querySelector(".popup");
+  popup.classList.remove("active");
+}
+
+handleReset();
